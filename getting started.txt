@@ -1,0 +1,41 @@
+This briefing document summarizes key findings from the presentation "Multiple drone type classification using machine learning techniques based on FMCW radar micro-Doppler data." The presentation explores the feasibility of classifying different drone types using undersampled Frequency-Modulated Continuous-Wave (FMCW) radar micro-Doppler signatures.
+
+Key Themes and Findings:
+1. The Challenge of Micro-Doppler Undersampling in FMCW Radar:
+
+CW Radar Strengths: Continuous Wave (CW) radar is effective for discriminating drone types based on fully sampled micro-Doppler signatures due to its high Doppler sensitivity. As noted in the presentation, "we've previously shown that you can use CW millimeter wave data to discriminate drone types based on the micro-Doppler signatures." Examples of distinct "blade flash spectrograms" were shown for different drone types.
+CW Radar Limitation: The primary drawback of CW radar is its inability to localize the target.
+FMCW Radar Advantage & Limitation: FMCW radar can localize targets, but "typically FMCW radars undersample the micro Doppler because their chirp repetition rate is usually insufficiently high." For instance, a DJI Phantom 3 with propellers rotating at 40 Hz would require a 40 kHz chirp repetition frequency for full micro-Doppler sampling at 94 GHz, which is "unfeasibly high in practice." This undersampling leads to aliased micro-Doppler energy spread across the Doppler spectrum, making individual blade flashes difficult to resolve.
+2. Project Objective:
+
+The core question addressed by this research was: "Can drone model type be discriminated upon based on undersampled FMCW micro Doppler signatures?"
+3. Experimental Setup and Data Collection:
+
+Radar System: A 94 GHz radar system, configurable for both FMCW and CW modes, was used. It featured a 150 MHz bandwidth, dual fan beams, and high sensitivity.
+Drones Used: Four distinct drone types were included in the study:
+Large hexacopter (S900, ~1 meter across)
+Medium-sized quadcopter (Inspire 1, ~0.5 meter across)
+DJI Phantom 3 (approx. 1 foot across)
+Very large quadcopter (Giant, ~1 meter across, with larger blades)
+Data Set: Data was collected at various distances (tens to hundreds of meters). While the initial dataset was not large, it served as a "proof of concept." Spectrograms were generated from manually extracted range bins of interest.
+4. Derived Features for Classification: Three key features were extracted from the micro-Doppler spectrograms for machine learning classification:
+
+Micro-Doppler Strength: This feature quantifies the overall micro-Doppler energy in a short-window spectrogram after suppressing bulk Doppler clutter. It represents "how much micro-Doppler energy is there overall in that 1 second or roughly 1 second spectrogram."
+Bulk to Micro-Doppler Ratio: This feature compares the average micro-Doppler energy to the average bulk Doppler energy, indicating "how far below the bulk on average is the micro-Doppler."
+Hermline Spacing: Derived from a long-window spectrogram, this feature identifies and measures the spacing between "roto modulation lines" (peaks) within a fixed Doppler velocity range. This spacing depends on factors like "rotation rate [and] blade length."
+5. Machine Learning Classification Results:
+
+Methodology: Matlab's classification learner app was used, testing 24 different classifiers. Data was split into 80% for training and 20% for validation.
+Four-Class Classification (All Drones):The best accuracy achieved was 85% using the Quadratic SVM classifier.
+The primary source of misclassification was the confusion between the Phantom 3 and the S900, likely due to similar blade lengths, though blade shapes differ.
+Three-Class Classification:In the worst case (including both S900 and Phantom), accuracy was around 77%.
+The best-case scenario (excluding either the S900 or Phantom) yielded approximately 97% accuracy. This indicates promising results when certain drone types are not simultaneously present in the classification task.
+Two-Class Classification: The presentation noted further analysis of various two-class combinations, with results presented in a table showing classifier performance and prediction speed.
+Feature Significance: The bulk to micro-Doppler ratio was found to be the weakest feature for classification, suggesting it may not be worthwhile for future efforts.
+Prediction Speed: The "prediction speed" of classifiers is a critical factor for real-time monitoring applications, as decisions need to be made rapidly. Different classifiers exhibited varying speeds.
+6. Limitations and Future Work:
+
+Dataset Size: The current dataset is "not a very big data set." As the presenter noted, "I know for statistical accuracy and reliability, you want your machine learning to be trained on large amounts of data."
+Further Investigation: The confusion between the S900 and Phantom 3 requires "further investigation," potentially focusing on blade length and shape.
+More Data: The overarching recommendation for future work is the need for "more data" to enhance the statistical accuracy and reliability of the machine learning models.
+Conclusion: Despite the challenges of undersampled FMCW micro-Doppler data and the preliminary nature of the small dataset, the results demonstrate "definite promise" for discriminating drone model types using extracted features like micro-Doppler strength and hermline spacing. While the S900 and Phantom 3 remain the most easily confused, the high accuracy achieved in certain three-class classifications is particularly encouraging.
